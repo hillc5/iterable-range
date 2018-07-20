@@ -1,0 +1,36 @@
+{
+  "name": "range-iterator",
+  "version": "1.0.0",
+  "description": "Sequential positive range iterator with map, filter, and take helper functions",
+  "main": "lib/range.js",
+  "scripts": {
+    "test": "babel-tape-runner test/**/*-test.js | faucet",
+    "build": "babel src --out-dir lib --ignore test.js",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hillc5/range-iterator.git"
+  },
+  "keywords": [
+    "range",
+    "iterable",
+    "generator",
+    "lazy",
+    "filter",
+    "map"
+  ],
+  "author": "Charlie Hill",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hillc5/range-iterator/issues"
+  },
+  "homepage": "https://github.com/hillc5/range-iterator#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-tape-runner": "^2.0.1",
+    "faucet": "0.0.1",
+    "tape": "^4.9.1"
+  }
+}
