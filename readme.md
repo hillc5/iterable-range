@@ -28,7 +28,7 @@ const r2 = range(5) // Single argument, defaults initial value to 0
 
 ## Helper Methods
 
-####  map 
+###  map 
 **Parmeters: *mapFn*** - The function to be applied to each viable value in the range.  
 Mapfn is supplied with just the value to be acted upon
 
@@ -43,7 +43,7 @@ const r = range(1, 5);
 
 ```
 
-#### filter
+### filter
 **Parameters: *filterFn*** - The function to be applied to each vialb value in the range.  
 If filterFn returns *falsy* for any given value then that value will not appear in the next chained method, and will effectively be removed from the range.  Filterfn is supplied with just the value to be acted upon
 
@@ -60,7 +60,7 @@ const r = range(1, 5);
 ```
 
 
-#### take
+### take
 **Parameters: *numToTake*** - The number of elements to be produced by the range and it's transform chain.  
 The take method can appear in any place in the range transform chain, and if multiple calls are made, the last call will be the used value
 
@@ -73,7 +73,7 @@ const r = range(1, Infinity)  // Will run for ever if used without .take(numToTa
 
 ```
 
-#### reverse
+### reverse
 Reverses the output from the range iterable.  It can be called anywhere in the transform chain, but multiple calls will not negate one another -- Once reverse is called output will always be reversed.
 
 ```javascript
