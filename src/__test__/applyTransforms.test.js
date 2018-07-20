@@ -8,7 +8,7 @@ test('applyTransforms - should return the given index if there are no transforms
     const transforms = [];
 
     const result = applyTransforms(index, transforms);
-    t.equal(result, index);
+    t.isEquivalent(result, { value: index, filtered: false });
     t.end();
 });
 
@@ -17,7 +17,7 @@ test('applyTransforms - should return the given index if no transforms array is 
     const transforms = undefined;
 
     const result = applyTransforms(index, transforms);
-    t.equal(result, index);
+    t.isEquivalent(result, { value: index, filtered: false });
     t.end();
 });
 
@@ -26,7 +26,7 @@ test('applyTransforms - should return the given index if a null transforms param
     const transforms = null;
 
     const result = applyTransforms(index, transforms);
-    t.equal(result, index);
+    t.isEquivalent(result, { value: index, filtered: false });
     t.end();
 });
 
@@ -35,7 +35,7 @@ test('applyTransforms - should return the given index if transforms is not an ar
     const transforms = 'this is an array';
 
     const result = applyTransforms(index, transforms);
-    t.equal(result, index);
+    t.isEquivalent(result, { value: index, filtered: false });
     t.end();
 });
 
@@ -52,7 +52,7 @@ test('applyTransforms - should return the correctly mapped value when a given tr
 
     const result = applyTransforms(index, transforms);
 
-    t.equal(result, expectedVal);
+    t.isEquivalent(result, { value: expectedVal, filtered: false });
     t.end();
 });
 
@@ -67,7 +67,7 @@ test('applyTransforms - should return undefined if a single filter transform ret
 
     const result = applyTransforms(index, transforms);
 
-    t.equal(result, undefined);
+    t.isEquivalent(result, { value: undefined, filtered: true });
     t.end();
 });
 
@@ -82,7 +82,7 @@ test('applyTransforms - should return the index if a single filter transform ret
 
     const result = applyTransforms(index, transforms);
 
-    t.equal(result, index);
+    t.isEquivalent(result, { value: index, filtered: false });
     t.end();
 });
 
@@ -104,7 +104,7 @@ test('applyTransforms - should not call any waiting transforms if any preceding 
 
     const result = applyTransforms(index, transforms);
 
-    t.equal(result, undefined);
+    t.isEquivalent(result, { value: undefined, filtered: true });
     t.equal(mapFn.called, false);
     t.end();
 });
@@ -128,6 +128,6 @@ test('applyTransforms - should apply all of the transforms in the transforms lis
 
     const result = applyTransforms(index, transforms);
 
-    t.equal(result, expected);
+    t.isEquivalent(result, { value: expected, filtered: false });
     t.end();
 });

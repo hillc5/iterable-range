@@ -2,23 +2,23 @@ import test from 'tape';
 
 import { withinBounds, updateValue } from '..';
 
-test('withinBounds - should return true for an index less than or equal to a given end if reverse is false', t => {
+test('withinBounds - should return true for an index less than a given end if reverse is false', t => {
     const lessThanValue = 0;
-    const equalValue = 5;
     const end = 5;
     const reverse = false;
 
     t.equal(withinBounds(lessThanValue, end, reverse), true);
-    t.equal(withinBounds(equalValue, end, reverse), true);
     t.end();
 });
 
-test('withinBounds - should return false for an index greater than to a given end if reverse is false', t => {
+test('withinBounds - should return false for an index greater than or equal to a given end if reverse is false', t => {
     const greaterThanValue = 10;
+    const equalValue = 5;
     const end = 5;
     const reverse = false;
 
     t.equal(withinBounds(greaterThanValue, end, reverse), false);
+    t.equal(withinBounds(equalValue, end, reverse), false);
     t.end();
 });
 

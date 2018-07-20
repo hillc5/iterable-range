@@ -1,4 +1,4 @@
-import { withinBounds, updateValue } from './utils';
+import { withinBounds, underTakeThreshold, updateValue } from './utils';
 
 export const TRANSFORM_TYPES = {
     MAP: 'map',
@@ -23,26 +23,31 @@ export function generateTransform(type = TRANSFORM_TYPES.MAP, fn) {
  *                        (Note: if a FILTER function returns falsy, undefined will be returned).
  */
 export function applyTransforms(value, transforms = []) {
-    if (!transforms || !Array.isArray(transforms)) return value;
-
-    let transformsIdx = 0;
-    let result = value;
+    if (!transforms || !Array.isArray(transforms)) return { value, filtered: false };
     
-    while(transformsIdx < transforms.length && result !== undefined) {
-        let { type, transform } = transforms[transformsIdx];
-        
+    for (let transformObj of transforms) {
+        const { type, transform } = transformObj;
         if (type === TRANSFORM_TYPES.FILTER) {
-            if (!transform(result)) {
-                result = undefined;
-            }
+            if (!transform(value)) return { value: undefined, filtered: true };
         } else {
-            result = transform(result);
+            value = transform(value);
         }
-
-        transformsIdx++;
     }
 
-    return result;
+    return { value, filtered: false };
+}
+
+function _generateValue(element, transforms, end, reverse) {
+    let newElement = element;
+    let { value, filtered } = applyTransforms(newElement, transforms);
+    
+    while (filtered && withinBounds(newElement, end, reverse)) {
+        newElement = updateValue(newElement, reverse);
+        // weird destructuring syntax for existing variables
+        ({ value, filtered } = applyTransforms(newElement, transforms));
+    }
+
+    return { value, newElement };
 }
 
 /**
@@ -53,22 +58,20 @@ export function applyTransforms(value, transforms = []) {
  *                                      { type: TRANSFORM_TYPES{MAP|FILTER}, transform: fn }
  * @return {function} iter - An iterator function that returns an Object with { next: fn } 
  */
-function _getRangeIterator(start, end, takeNum, transforms, reverse) {
+function _getRangeIterator({ start, end, takeNum, transforms, reverse }) {
     let pushCount = 0;
 
-    [start, end] = reverse ? [end, start] : [start, end];
+    [start, end] = reverse ? [end - 1, start] : [start, end];
     
     function iter() {
         let element = start;
 
         return {
             next() {
-                const { value, newElement } = _getValueAndNewElement(element, transforms, end, reverse);
+                const { value, newElement } = _generateValue(element, transforms, end, reverse);
                 element = newElement;
 
-                const underTakeThresh = (takeNum === undefined || pushCount < takeNum);
-
-                if (withinBounds(element, end, reverse) && underTakeThresh) {
+                if (withinBounds(element, end, reverse) && underTakeThreshold(pushCount, takeNum)) {
                     pushCount++;
                     element = updateValue(element, reverse);
                     return { value, done: false };
@@ -80,18 +83,6 @@ function _getRangeIterator(start, end, takeNum, transforms, reverse) {
     }
 
     return iter;
-}
-
-function _getValueAndNewElement(element, transforms, end, reverse) {
-    let newElement = element;
-    let value = applyTransforms(newElement, transforms);
-    
-    while (value === undefined && withinBounds(newElement, end, reverse)) {
-        newElement = updateValue(newElement, reverse);
-        value = applyTransforms(newElement, transforms);
-    }
-
-    return { value, newElement };
 }
 
 /**
@@ -108,37 +99,64 @@ export default function range(start = 0, end) {
         start = 0;
     }
 
-    let transforms = [];
-    let takeNum;
-    let reverse;
+    const getNewConfig = initializeConfig(start, end)
+    let config = getNewConfig();
 
     const rangeObject = {
         take(num) {
-            takeNum = num;
-            this[Symbol.iterator] = _getRangeIterator(start, end, takeNum, [...transforms], reverse);
+            config = getNewConfig(config, { takeNum: num })
+            this[Symbol.iterator] = _getRangeIterator(config);
             return rangeObject;
         },
 
         map(fn) {
-            transforms.push(generateTransform(TRANSFORM_TYPES.MAP, fn));
-            this[Symbol.iterator] = _getRangeIterator(start, end, takeNum, [...transforms], reverse);
+            const update = getTransformUpdate(config.transforms, generateTransform(TRANSFORM_TYPES.MAP, fn));
+            config = getNewConfig(config, update)
+            this[Symbol.iterator] = _getRangeIterator(config);
             return rangeObject;
         },
 
         filter(fn) {
-            transforms.push(generateTransform(TRANSFORM_TYPES.FILTER, fn));
-            this[Symbol.iterator] = _getRangeIterator(start, end, takeNum, [...transforms], reverse);
+            const update = getTransformUpdate(config.transforms, generateTransform(TRANSFORM_TYPES.FILTER, fn));
+            config = getNewConfig(config, update)
+            this[Symbol.iterator] = _getRangeIterator(config);
             return rangeObject;
         },
 
         reverse() {
-            reverse = true;
-            this[Symbol.iterator] = _getRangeIterator(start, end, takeNum, [...transforms], reverse);
+            config = getNewConfig(config, { reverse: true })
+            this[Symbol.iterator] = _getRangeIterator(config);
             return rangeObject;
         },
 
-        [Symbol.iterator]: _getRangeIterator(start, end, takeNum, [...transforms], reverse)
+        [Symbol.iterator]: _getRangeIterator(config)
     }
 
     return rangeObject;
 }
+
+function getTransformUpdate(transforms, newTransform) {
+    return {
+        transforms: [ ...transforms, newTransform ]
+    };
+}
+
+function initializeConfig(start, end) {
+    return (...args) => {
+        if (!args.length) {
+            return {
+                start,
+                end,
+                transforms: [],
+                reverse: false,
+                takeNum: undefined
+            }
+        }
+
+        const [ current, update = {} ] = args;
+        return {
+            ...current,
+            ...update
+        }
+    }
+};

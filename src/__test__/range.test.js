@@ -2,8 +2,8 @@ import test from 'tape';
 
 import range from '../range';
 
-test('range - should return an iterable that produces all values from the given start (inclusive) to the given end (inclusive)', t => {
-    const expected = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
+test('range - should return an iterable that produces all values from the given start (inclusive) to the given end (non-inclusive)', t => {
+    const expected = [ 1, 2, 3, 4, 5, 6, 7, 8, 9  ];
     const start = 1;
     const end = 10;
 
@@ -11,20 +11,20 @@ test('range - should return an iterable that produces all values from the given 
     t.end();
 });
 
-test('range - should return an iterable that produces all values from 0 to the given end (inclusive) if a single value passed in', t => {
-    const expected = [ 0, 1, 2, 3, 4, 5 ];
+test('range - should return an iterable that produces all values from 0 to the given end (non-inclusive) if a single value passed in', t => {
+    const expected = [ 0, 1, 2, 3, 4 ];
     const end = 5;
 
     t.isEquivalent([...range(end)], expected);
     t.end();
 });
 
-test('range - should produce mapped values over the given start to end range if .map is called', t => {
+test('range - should produce mapped values over the given start to end (non-inclusive) range if .map is called', t => {
     const mapFn = val => val * val;
     const start = 1;
     const end = 5;
 
-    const expected = [ 1, 4, 9, 16, 25 ];
+    const expected = [ 1, 4, 9, 16 ];
 
     t.isEquivalent([...range(start, end).map(mapFn)], expected);
     t.end();
@@ -35,7 +35,7 @@ test('range - should only produce values that return a truthy value from a filte
     const start = 1;
     const end = 5;
 
-    const expected = [ 1, 3, 5 ];
+    const expected = [ 1, 3 ];
 
     t.isEquivalent([...range(start, end).filter(filterFn)], expected);
     t.end();
@@ -45,7 +45,7 @@ test('range - should produced a reversed set of values if reverse is called', t 
     const start = 1;
     const end = 10;
 
-    const expected = [ 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 ];
+    const expected = [ 9, 8, 7, 6, 5, 4, 3, 2, 1 ];
 
     t.isEquivalent([...range(start, end).reverse()], expected);
     t.end();

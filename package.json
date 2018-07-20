@@ -28,6 +28,7 @@
   "homepage": "https://github.com/hillc5/range-iterator#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-tape-runner": "^2.0.1",
     "faucet": "0.0.1",
