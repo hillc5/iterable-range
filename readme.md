@@ -28,7 +28,7 @@ const r2 = range(5) // Single argument, defaults initial value to 0
 
 ## Helper Methods
 
-#### * map 
+####  map 
 **Parmeters: *mapFn*** - The function to be applied to each viable value in the range.  
 Mapfn is supplied with just the value to be acted upon
 
