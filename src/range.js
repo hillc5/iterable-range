@@ -5,13 +5,21 @@ export const TRANSFORM_TYPES = {
 
 /**
  * @param  {string} type - one of either TRANSFORM_TYPES {MAP|FILTER}
- * @param  {Function} fn - the transform function (map returns a new value, filter expected to return truthy|falsy)
+ * @param  {Function} fn - the transform function (map returns a new value,
+ *                         filter expected to return truthy|falsy)
  * @return {Object} result - { type: TRANSFORM_TYPES{MAP|FILTER}, transform: fn }
  */
 export function generateTransform(type = TRANSFORM_TYPES.MAP, fn) {
     return { type, transform: fn };
 }
 
+/**
+ * @param  {Any} index - the value that will have the given transforms applied
+ * @param  {Array} transforms - list of transform objects of form 
+ *                              { type: TRANSFORM_TYPES{MAP|FILTER}, transform: transformFn }
+ * @return {Any} result - new value produced by the transform functions 
+ *                        (Note: if a FILTER function returns falsy, undefined will be returned).
+ */
 export function applyTransforms(index, transforms = []) {
     if (!transforms || !Array.isArray(transforms)) return index;
 
@@ -39,7 +47,8 @@ export function applyTransforms(index, transforms = []) {
  * @param  {number} start - The starting value
  * @param  {number} end - The ending (nonInclusive) value
  * @param  {number} takeNum - The total number of values desired to be returned
- * @param  {array<Object>} transforms - List of transform object of the form { type: 'map|filter', transform: fn }
+ * @param  {array<Object>} transforms - List of transform object of the form 
+ *                                      { type: TRANSFORM_TYPES{MAP|FILTER}, transform: fn }
  * @return {function} iter - An iterator function that returns an Object with { next: fn } 
  */
 export function getRangeIterator(start, end, takeNum, transforms) {
@@ -75,9 +84,12 @@ export function getRangeIterator(start, end, takeNum, transforms) {
 }
 
 /**
- * @param  {Number} start - The starting (inclusive) value for the desired range (if ommitted zero is default)
+ * @param  {Number} start - The starting (inclusive) value for the desired 
+ *                          range (if ommitted zero is default)
  * @param  {Number} end - The ending (non-inclusive) value for the desired range
- * @return {Object} result - iterable object with functions to transform (map), filter, or limit (take) the range output { take(num), map(fn), filter(fn) [Symbol.iterator] }
+ * @return {Object} result - iterable object with functions to transform (map), 
+ *                           filter, or limit (take) the range output 
+ *                           { take(num), map(fn), filter(fn) [Symbol.iterator] }
  */
 export default function range(start = 0, end) {
     if (!end) {
