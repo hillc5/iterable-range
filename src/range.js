@@ -63,12 +63,8 @@ function _getRangeIterator(start, end, takeNum, transforms, reverse) {
 
         return {
             next() {
-                let value = applyTransforms(element, transforms);
-                
-                while (value === undefined && withinBounds(element, end, reverse)) {
-                    element = updateValue(element, reverse);
-                    value = applyTransforms(element, transforms);
-                }
+                const { value, newElement } = _getValueAndNewElement(element, transforms, end, reverse);
+                element = newElement;
 
                 const underTakeThresh = (takeNum === undefined || pushCount < takeNum);
 
@@ -84,6 +80,18 @@ function _getRangeIterator(start, end, takeNum, transforms, reverse) {
     }
 
     return iter;
+}
+
+function _getValueAndNewElement(element, transforms, end, reverse) {
+    let newElement = element;
+    let value = applyTransforms(newElement, transforms);
+    
+    while (value === undefined && withinBounds(newElement, end, reverse)) {
+        newElement = updateValue(newElement, reverse);
+        value = applyTransforms(newElement, transforms);
+    }
+
+    return { value, newElement };
 }
 
 /**
