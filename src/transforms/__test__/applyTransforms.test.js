@@ -1,7 +1,8 @@
 import test from 'tape';
 import sinon from 'sinon';
 
-import { TRANSFORM_TYPES, applyTransforms } from '../range';
+import applyTransforms from '../applyTransforms';
+import TRANSFORM_TYPES from '../transform-types';
 
 test('applyTransforms - should return the given index if there are no transforms in the transforms list', t => {
     const index = 0;

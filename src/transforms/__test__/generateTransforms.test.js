@@ -1,6 +1,6 @@
 import test from 'tape';
-
-import { TRANSFORM_TYPES, generateTransform } from '../range';
+import generateTransform from '../generateTransform';
+import TRANSFORM_TYPES from '../transform-types';
 
 test('generateTransforms - should default to a MAP type', t => {
     const transform = generateTransform(undefined, () => {});

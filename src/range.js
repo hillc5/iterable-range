@@ -1,41 +1,7 @@
-import { withinBounds, underTakeThreshold, updateValue } from './utils';
-
-export const TRANSFORM_TYPES = {
-    MAP: 'map',
-    FILTER: 'filter'
-};
-
-/**
- * @param  {string} type - one of either TRANSFORM_TYPES {MAP|FILTER}
- * @param  {Function} fn - the transform function (map returns a new value,
- *                         filter expected to return truthy|falsy)
- * @return {Object} result - { type: TRANSFORM_TYPES{MAP|FILTER}, transform: fn }
- */
-export function generateTransform(type = TRANSFORM_TYPES.MAP, fn) {
-    return { type, transform: fn };
-}
-
-/**
- * @param  {Any} value - the value that will have the given transforms applied
- * @param  {Array} transforms - list of transform objects of form 
- *                              { type: TRANSFORM_TYPES{MAP|FILTER}, transform: transformFn }
- * @return {Any} result - new value produced by the transform functions 
- *                        (Note: if a FILTER function returns falsy, undefined will be returned).
- */
-export function applyTransforms(value, transforms = []) {
-    if (!transforms || !Array.isArray(transforms)) return { value, filtered: false };
-    
-    for (let transformObj of transforms) {
-        const { type, transform } = transformObj;
-        if (type === TRANSFORM_TYPES.FILTER) {
-            if (!transform(value)) return { value: undefined, filtered: true };
-        } else {
-            value = transform(value);
-        }
-    }
-
-    return { value, filtered: false };
-}
+import { withinBounds, underLimit, updateValue } from './utils';
+import applyTransforms from './transforms/applyTransforms';
+import generateTransform from './transforms/generateTransform';
+import TRANSFORM_TYPES from './transforms/transform-types';
 
 function _generateValue(element, transforms, end, reverse) {
     let newElement = element;
@@ -53,12 +19,12 @@ function _generateValue(element, transforms, end, reverse) {
 /**
  * @param  {number} start - The starting value
  * @param  {number} end - The ending (inclusive) value
- * @param  {number} takeNum - The total number of values desired to be returned
+ * @param  {number} limit - The total number of values desired to be returned
  * @param  {array<Object>} transforms - List of transform object of the form 
  *                                      { type: TRANSFORM_TYPES{MAP|FILTER}, transform: fn }
  * @return {function} iter - An iterator function that returns an Object with { next: fn } 
  */
-function _getRangeIterator({ start, end, takeNum, transforms, reverse }) {
+function _getRangeIterator({ start, end, limit, transforms, reverse }) {
     let pushCount = 0;
 
     [start, end] = reverse ? [end - 1, start] : [start, end];
@@ -71,7 +37,7 @@ function _getRangeIterator({ start, end, takeNum, transforms, reverse }) {
                 const { value, newElement } = _generateValue(element, transforms, end, reverse);
                 element = newElement;
 
-                if (withinBounds(element, end, reverse) && underTakeThreshold(pushCount, takeNum)) {
+                if (withinBounds(element, end, reverse) && underLimit(pushCount, limit)) {
                     pushCount++;
                     element = updateValue(element, reverse);
                     return { value, done: false };
@@ -90,8 +56,8 @@ function _getRangeIterator({ start, end, takeNum, transforms, reverse }) {
  *                          range (if ommitted zero is default)
  * @param  {Number} end - The ending (inclusive) value for the desired range
  * @return {Object} result - iterable object with functions to transform (map), 
- *                           reverse, filter, or limit (take) the range output 
- *                           { take(num), map(fn), filter(fn) [Symbol.iterator] }
+ *                           reverse, filter, or limit (limit) the range output 
+ *                           { limit(num), map(fn), filter(fn) [Symbol.iterator] }
  */
 export default function range(start = 0, end) {
     if (end === undefined || end === null) {
@@ -103,8 +69,8 @@ export default function range(start = 0, end) {
     let config = getNewConfig();
 
     const rangeObject = {
-        take(num) {
-            config = getNewConfig(config, { takeNum: num })
+        limit(num) {
+            config = getNewConfig(config, { limit: num })
             this[Symbol.iterator] = _getRangeIterator(config);
             return rangeObject;
         },
@@ -149,7 +115,7 @@ function initializeConfig(start, end) {
                 end,
                 transforms: [],
                 reverse: false,
-                takeNum: undefined
+                limit: undefined
             }
         }
 

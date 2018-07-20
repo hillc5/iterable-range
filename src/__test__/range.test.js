@@ -51,14 +51,14 @@ test('range - should produced a reversed set of values if reverse is called', t 
     t.end();
 });
 
-test('range - should only produce the number of values equal to a threshold defined by .take', t => {
+test('range - should only produce the number of values equal to a threshold defined by .limit', t => {
     const start = 1;
     const end =  100;
-    const takeValue = 10;
+    const limitValue = 10;
 
     const expected = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
 
-    t.isEquivalent([...range(start, end).take(takeValue)], expected);
+    t.isEquivalent([...range(start, end).limit(limitValue)], expected);
     t.end();
 });
 
@@ -88,15 +88,15 @@ test('range - should only transform values that pass the filter if filter is cal
     t.end();
 });
 
-test('range - should only use the last take value if multiple take calls are made', t => {
+test('range - should only use the last limit value if multiple limit calls are made', t => {
     const start = 1;
     const end = 100;
-    const takeOne = 50;
-    const takeTwo = 10;
+    const limitOne = 50;
+    const limitTwo = 10;
 
     const expected = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
 
-    t.isEquivalent([...range(start, end).take(takeOne).take(takeTwo)], expected);
+    t.isEquivalent([...range(start, end).limit(limitOne).limit(limitTwo)], expected);
     t.end();
 });
 
@@ -111,12 +111,12 @@ test('range - should not produce any values if start is after end', t => {
 });
 
 
-test('range - should not produce any values if take is called with a negative number', t => {
+test('range - should not produce any values if limit is called with a negative number', t => {
     const start = 1;
     const end = 10;
 
     const expected = [];
 
-    t.isEquivalent([...range(start, end).take(-1)], expected);
+    t.isEquivalent([...range(start, end).limit(-1)], expected);
     t.end();
 });

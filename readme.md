@@ -60,16 +60,16 @@ const r = range(1, 5);
 ```
 
 
-### take
-**Parameters: *numToTake*** - The number of elements to be produced by the range and it's transform chain.  
-The take method can appear in any place in the range transform chain, and if multiple calls are made, the last call will be the used value
+### limit
+**Parameters: *limitVal*** - The number of elements to be produced by the range and it's transform chain.  
+The limit method can appear in any place in the range transform chain, and if multiple calls are made, the last call will be the used value
 
 ```javascript
-const r = range(1, Infinity)  // Will run for ever if used without .take(numToTake)
+const r = range(1, Infinity)  // Will run for ever if used without .limit(limitVal)
 
-[...r.take(5)] // [1, 2, 3, 4, 5]
-[...r.take(5).take(10)] // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-[...r.map(val => val * val).filter(val => val % 2).take(100)] // Will produce the first 100 odd square numbers
+[...r.limit(5)] // [1, 2, 3, 4, 5]
+[...r.limit(5).limit(10)] // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[...r.map(val => val * val).filter(val => val % 2).limit(100)] // Will produce the first 100 odd square numbers
 
 ```
 
@@ -81,6 +81,6 @@ const r = range(1, 10);
 
 [...r.reverse()] // [9, 8, 7, 6, 5, 4, 3, 2, 1]
 
-[...r.map(val => val * val).take(5).reverse()] // [25, 16, 9, 4 ,1]
+[...r.map(val => val * val).limit(5).reverse()] // [25, 16, 9, 4 ,1]
 
 ```

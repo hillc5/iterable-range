@@ -6,6 +6,6 @@ export function updateValue(index, decrement) {
     return decrement ? index - 1 : index + 1;
 }
 
-export function underTakeThreshold(pushCount, takeNum) {
-    return (takeNum === undefined || pushCount < takeNum);
+export function underLimit(pushCount, limit) {
+    return (limit === undefined || pushCount < limit);
 }
