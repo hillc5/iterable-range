@@ -93,7 +93,41 @@ test('applyTransforms - should not call any waiting transforms if any preceding 
 
     const transforms = [
         {
-            type: 
+            type: TRANSFORM_TYPES.FILTER,
+            transform: filterFn
+        },
+        {
+            type: TRANSFORM_TYPES.MAP,
+            transform: mapFn
         }
     ];
-})
+
+    const result = applyTransforms(index, transforms);
+
+    t.equal(result, undefined);
+    t.equal(mapFn.called, false);
+    t.end();
+});
+
+test('applyTransforms - should apply all of the transforms in the transforms list', t => {
+    const mapFnOne = val => val * 2;
+    const mapFnTwo = val => val * 1e3;
+    const index = 2;
+    const expected = mapFnTwo(mapFnOne(index));
+
+    const transforms = [
+        {
+            type: TRANSFORM_TYPES.MAP,
+            transform: mapFnOne
+        },
+        {
+            type: TRANSFORM_TYPES.MAP,
+            transform: mapFnTwo
+        }
+    ];
+
+    const result = applyTransforms(index, transforms);
+
+    t.equal(result, expected);
+    t.end();
+});
