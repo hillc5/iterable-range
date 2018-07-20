@@ -1,4 +1,5 @@
 import { withinBounds, underLimit, updateValue } from './utils';
+import initializeRangeConfig from './config/initializeRangeConfig';
 import applyTransforms from './transforms/applyTransforms';
 import generateTransform from './transforms/generateTransform';
 import TRANSFORM_TYPES from './transforms/transform-types';
@@ -65,64 +66,33 @@ export default function range(start = 0, end) {
         start = 0;
     }
 
-    const getNewConfig = initializeConfig(start, end)
-    let config = getNewConfig();
+    const getNewConfig = initializeRangeConfig(start, end);
 
     const rangeObject = {
         limit(num) {
-            config = getNewConfig(config, { limit: num })
-            this[Symbol.iterator] = _getRangeIterator(config);
+            this[Symbol.iterator] = _getRangeIterator(getNewConfig({ limit: num }));
             return rangeObject;
         },
 
         map(fn) {
-            const update = getTransformUpdate(config.transforms, generateTransform(TRANSFORM_TYPES.MAP, fn));
-            config = getNewConfig(config, update)
-            this[Symbol.iterator] = _getRangeIterator(config);
+            const update = { transforms: [ generateTransform(TRANSFORM_TYPES.MAP, fn) ] };
+            this[Symbol.iterator] = _getRangeIterator(getNewConfig(update));
             return rangeObject;
         },
 
         filter(fn) {
-            const update = getTransformUpdate(config.transforms, generateTransform(TRANSFORM_TYPES.FILTER, fn));
-            config = getNewConfig(config, update)
-            this[Symbol.iterator] = _getRangeIterator(config);
+            const update = { transforms: [ generateTransform(TRANSFORM_TYPES.FILTER, fn) ] };
+            this[Symbol.iterator] = _getRangeIterator(getNewConfig(update));
             return rangeObject;
         },
 
         reverse() {
-            config = getNewConfig(config, { reverse: true })
-            this[Symbol.iterator] = _getRangeIterator(config);
+            this[Symbol.iterator] = _getRangeIterator(getNewConfig({ reverse: true }));
             return rangeObject;
         },
 
-        [Symbol.iterator]: _getRangeIterator(config)
+        [Symbol.iterator]: _getRangeIterator(getNewConfig())
     }
 
     return rangeObject;
 }
-
-function getTransformUpdate(transforms, newTransform) {
-    return {
-        transforms: [ ...transforms, newTransform ]
-    };
-}
-
-function initializeConfig(start, end) {
-    return (...args) => {
-        if (!args.length) {
-            return {
-                start,
-                end,
-                transforms: [],
-                reverse: false,
-                limit: undefined
-            }
-        }
-
-        const [ current, update = {} ] = args;
-        return {
-            ...current,
-            ...update
-        }
-    }
-};
