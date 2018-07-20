@@ -1,6 +1,6 @@
 {
   "name": "range-iterator",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Sequential positive range iterator with map, filter, and take helper functions",
   "main": "lib/range.js",
   "scripts": {
