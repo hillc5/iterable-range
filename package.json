@@ -6,7 +6,7 @@
   "scripts": {
     "test": "babel-tape-runner **/*.test.js | faucet",
     "build": "babel src --out-dir lib --ignore test.js",
-    "prepare": "npm run build"
+    "prepare": "npm run test && npm run build"
   },
   "repository": {
     "type": "git",
