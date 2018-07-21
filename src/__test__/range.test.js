@@ -105,6 +105,28 @@ test('range - should only use the last limit value if multiple limit calls are m
     t.end();
 });
 
+test('range - should stop producing values once takeUntil returns true', t => {
+    const takeUntil = val => val > 6;
+    const start = 1;
+    const end = 10;
+
+    const expected = [ 1, 2, 3, 4, 5, 6 ];
+
+    t.isEquivalent([...range(start, end).takeUntil(takeUntil)], expected);
+    t.end();
+});
+
+test('range - stop producing values if the takeUntil function returns true, regardless of where in the chain it is called', t => {
+    const takeUntil = val => val === 49;
+        const start = 1;
+        const end = 10;
+
+        const expected = [ 1, 4, 9, 16, 25, 36 ];
+
+        t.isEquivalent([...range(start, end).takeUntil(takeUntil).map(val => val * val)], expected);
+        t.end();
+});
+
 test('range - should not produce any values if start is after end', t => {
     const start = 10;
     const end = 0

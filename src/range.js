@@ -18,27 +18,43 @@ function _generateValue(element, transforms, end, reverse) {
 }
 
 /**
- * @param  {number} start - The starting value
- * @param  {number} end - The ending (inclusive) value
- * @param  {number} limit - The total number of values desired to be returned
- * @param  {array<Object>} transforms - List of transform object of the form 
- *                                      { type: TRANSFORM_TYPES{MAP|FILTER}, transform: fn }
+ * @param  {Object} rangeConfig - The configuration that defines this range iterator
+ *         It has the following schema:
+ *         
+ *         {
+ *             start <Number>           - the starting value in the range,
+ *             end <Number>             - the ending value (non-inclusive) in the range,
+ *             limit <Number>           - the maximum number of values to produce
+ *             transforms <Array>       - a list of transformation functions to be applied to the value
+ *             reverse <Boolean>        - a flag indicating whether the output should be reversed
+ *             takeUntil <Function>     - a stopping function, if it returns true, stop producing output
+ *         }
+
  * @return {function} iter - An iterator function that returns an Object with { next: fn } 
  */
-function _getRangeIterator({ start, end, limit, transforms, reverse }) {
+function _getRangeIterator(rangeConfig) {
+    const { 
+        start, 
+        end, 
+        limit, 
+        transforms, 
+        reverse, 
+        takeUntil 
+    } = rangeConfig;
+
     let pushCount = 0;
 
-    [start, end] = reverse ? [end - 1, start] : [start, end];
+    const [startVal, endVal] = reverse ? [end - 1, start] : [start, end];
     
     function iter() {
-        let element = start;
+        let element = startVal;
 
         return {
             next() {
-                const { value, newElement } = _generateValue(element, transforms, end, reverse);
+                const { value, newElement } = _generateValue(element, transforms, endVal, reverse);
                 element = newElement;
 
-                if (withinBounds(element, end, reverse) && underLimit(pushCount, limit)) {
+                if (withinBounds(element, endVal, reverse) && underLimit(pushCount, limit) && !takeUntil(value)) {
                     pushCount++;
                     element = updateValue(element, reverse);
                     return { value, done: false };
@@ -56,6 +72,7 @@ function _getRangeIterator({ start, end, limit, transforms, reverse }) {
  * @param  {Number} start - The starting (inclusive) value for the desired 
  *                          range (if ommitted zero is default)
  * @param  {Number} end - The ending (inclusive) value for the desired range
+ * 
  * @return {Object} result - iterable object with functions to transform (map), 
  *                           reverse, filter, or limit (limit) the range output 
  *                           { limit(num), map(fn), filter(fn) [Symbol.iterator] }
@@ -88,6 +105,11 @@ export default function range(start = 0, end) {
 
         reverse() {
             this[Symbol.iterator] = _getRangeIterator(getNewConfig({ reverse: true }));
+            return rangeObject;
+        },
+
+        takeUntil(fn) {
+            this[Symbol.iterator] = _getRangeIterator(getNewConfig({ takeUntil: fn }));
             return rangeObject;
         },
 

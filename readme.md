@@ -84,3 +84,16 @@ const r = range(1, 10);
 [...r.map(val => val * val).limit(5).reverse()] // [25, 16, 9, 4 ,1]
 
 ```
+
+### takeUntil
+**Parameters: *takeUntilFn*** - A function that indicates when the range iterator should stop producing values.  If takeUntilFn returns *truthy* for any value then the range iterator will disregard that value and stop producing values.  
+
+**Note** No matter where the .takeUntil method is called, it will be applied after all transforms have been applied to any value.
+
+```javascript
+const r = range(1, 10);
+
+[...r.takeUntil(val => val > 6)] // [1, 2, 3, 4, 5, 6]
+[...r.takeUntil(val => val === 25).map(val =>  val * val)] // [1, 4, 9, 16]
+
+```

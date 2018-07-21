@@ -4,7 +4,8 @@ export default function initializeRangeConfig(start, end) {
         end,
         transforms: [],
         reverse: false,
-        limit: undefined
+        limit: undefined,
+        takeUntil: () => false
     };
 
     return (...args) => {

@@ -1,4 +1,7 @@
 .babelrc
 src
 .gitignore
+.npmignore
 node_modules
+.nyc_output
+readme.md
