@@ -19,6 +19,11 @@ test('range - should return an iterable that produces all values from 0 to the g
     t.end();
 });
 
+test('range - should return an iterable that produces no output if start and end are not defined', t => {
+    t.isEquivalent([...range()], []);
+    t.end();
+});
+
 test('range - should produce mapped values over the given start to end (non-inclusive) range if .map is called', t => {
     const mapFn = val => val * val;
     const start = 1;

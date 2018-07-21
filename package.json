@@ -4,7 +4,8 @@
   "description": "Sequential positive range iterator with map, filter, and take helper functions",
   "main": "lib/range.js",
   "scripts": {
-    "test": "babel-tape-runner **/*.test.js | faucet",
+    "test": "nyc npm run run-tests",
+    "run-tests": "babel-tape-runner **/*.test.js | faucet",
     "build": "rm -rf ./lib && babel src --out-dir lib --ignore test.js",
     "prepare": "npm run test && npm run build"
   },
@@ -32,6 +33,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-tape-runner": "^2.0.1",
     "faucet": "0.0.1",
+    "nyc": "^12.0.2",
     "sinon": "^6.1.3",
     "tape": "^4.9.1"
   }

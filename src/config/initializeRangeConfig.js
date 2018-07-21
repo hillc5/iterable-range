@@ -12,13 +12,11 @@ export default function initializeRangeConfig(start, end) {
             return config
         }
 
-        const [ update = {} ] = args;
+        const [ update ] = args;
 
         if (update.transforms) {
             update.transforms = [ ...config.transforms, ...update.transforms ];
         }
-
-        console.log(update.transforms);
 
         config = {
             ...config,
