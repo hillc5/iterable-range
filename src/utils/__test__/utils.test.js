@@ -1,6 +1,6 @@
 import test from 'tape';
 
-import { withinBounds, updateValue } from '..';
+import { withinBounds, underLimit, updateValue } from '..';
 
 test('withinBounds - should return true for an index less than a given end if reverse is false', t => {
     const lessThanValue = 0;
@@ -57,5 +57,37 @@ test('updateValue - should return a decremented value if decrement is true', t =
     const decrement = true;
 
     t.equal(updateValue(index, decrement), expected);
+    t.end();
+});
+
+test('underLimit - should return true if limit is undefined', t => {
+    const limit = undefined;
+    const pushCount = 0;
+
+    t.equal(underLimit(pushCount, limit), true);
+    t.end();
+});
+
+test('underLimit - should return true if pushCount is under limit', t => {
+    const limit = 1;
+    const pushCount = 0;
+
+    t.equal(underLimit(pushCount, limit), true);
+    t.end();
+});
+
+test('underLimit - should return false if pushCount is equal to limit', t => {
+    const limit = 1;
+    const pushCount = 1;
+
+    t.equal(underLimit(pushCount, limit), false);
+    t.end();
+});
+
+test('underLimit - should return false if pushCount is over limit', t => {
+    const limit = 1;
+    const pushCount = 2;
+
+    t.equal(underLimit(pushCount, limit), false);
     t.end();
 });

@@ -5,7 +5,7 @@
   "main": "lib/range.js",
   "scripts": {
     "test": "babel-tape-runner **/*.test.js | faucet",
-    "build": "babel src --out-dir lib --ignore test.js",
+    "build": "rm -rf ./lib && babel src --out-dir lib --ignore test.js",
     "prepare": "npm run test && npm run build"
   },
   "repository": {
