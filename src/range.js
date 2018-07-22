@@ -87,30 +87,42 @@ export default function range(start = 0, end) {
 
     const rangeObject = {
         limit(num) {
-            this[Symbol.iterator] = _getRangeIterator(getNewConfig({ limit: num }));
-            return rangeObject;
+            return {
+                ...rangeObject,
+                [Symbol.iterator]: _getRangeIterator(getNewConfig({ limit: num }))
+            };
         },
 
         map(fn) {
             const update = { transforms: [ generateTransform(TRANSFORM_TYPES.MAP, fn) ] };
-            this[Symbol.iterator] = _getRangeIterator(getNewConfig(update));
-            return rangeObject;
+            
+            return {
+                ...rangeObject,
+                [Symbol.iterator]: _getRangeIterator(getNewConfig(update))
+            }
         },
 
         filter(fn) {
             const update = { transforms: [ generateTransform(TRANSFORM_TYPES.FILTER, fn) ] };
-            this[Symbol.iterator] = _getRangeIterator(getNewConfig(update));
-            return rangeObject;
+            
+            return {
+                ...rangeObject,
+                [Symbol.iterator]: _getRangeIterator(getNewConfig(update))
+            }
         },
 
         reverse() {
-            this[Symbol.iterator] = _getRangeIterator(getNewConfig({ reverse: true }));
-            return rangeObject;
+            return {
+                ...rangeObject,
+                [Symbol.iterator]: _getRangeIterator(getNewConfig({ reverse: true }))
+            };
         },
 
         takeUntil(fn) {
-            this[Symbol.iterator] = _getRangeIterator(getNewConfig({ takeUntil: fn }));
-            return rangeObject;
+            return {
+                ...rangeObject,
+                [Symbol.iterator]: _getRangeIterator(getNewConfig({ takeUntil: fn }))
+            };
         },
 
         [Symbol.iterator]: _getRangeIterator(getNewConfig())

@@ -8,7 +8,7 @@ npm i --save iterable-range
 
 ## Usage
 
-#### Quick creation
+### Quick creation
 ```javascript
 import range from 'iterable-range';
 
@@ -26,7 +26,20 @@ const r2 = range(5) // Single argument, defaults initial value to 0
 
 ```
 
-## Helper Methods
+## Methods
+Every method applied to an iterable range returns a new iterable range, preserving the original.
+```javascript
+const r = range(1, 5);
+
+[...r] // [1, 2, 3, 4]
+
+const r2 = r.map(val => val * -1);
+
+[...r2] // [-1, -2, -3, -4]
+[...r] // [1, 2, 3, 4]
+
+```
+
 
 ###  map 
 **Parmeters: *mapFn*** - The function to be applied to each viable value in the range.  
