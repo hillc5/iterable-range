@@ -1,7 +1,8 @@
-export default function initializeRangeConfig(start, end) {
+export default function initializeRangeConfig(start, end, step = 1) {
     let config = {
         start,
         end,
+        step,
         transforms: [],
         reverse: false,
         limit: undefined,

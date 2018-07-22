@@ -1,15 +1,17 @@
-import { withinBounds, underLimit, updateValue } from './utils';
+import { withinBounds, underLimit, updateValue, getStartAndEndValue, hasInvalidParameters } from './utils';
 import initializeRangeConfig from './config/initializeRangeConfig';
 import applyTransforms from './transforms/applyTransforms';
 import generateTransform from './transforms/generateTransform';
 import TRANSFORM_TYPES from './transforms/transform-types';
 
-function _generateValue(element, transforms, end, reverse) {
+function _generateValue(element, transforms, end, reverse, step) {
     let newElement = element;
     let { value, filtered } = applyTransforms(newElement, transforms);
     
-    while (filtered && withinBounds(newElement, end, reverse)) {
-        newElement = updateValue(newElement, reverse);
+    // While any filtered transforms remove a value, increment to the next element
+    // and apply transforms to produce another value
+    while (filtered && withinBounds(newElement, end, reverse, step < 0)) {
+        newElement = updateValue(newElement, reverse, step);
         // weird destructuring syntax for existing variables
         ({ value, filtered } = applyTransforms(newElement, transforms));
     }
@@ -30,12 +32,13 @@ function _generateValue(element, transforms, end, reverse) {
  *             takeUntil <Function>     - a stopping function, if it returns true, stop producing output
  *         }
 
- * @return {function} iter - An iterator function that returns an Object with { next: fn } 
+ * @return {function} iter - An iterator function that returns an Object with { next: fn }
  */
 function _getRangeIterator(rangeConfig) {
     const { 
         start, 
-        end, 
+        end,
+        step,
         limit, 
         transforms, 
         reverse, 
@@ -44,8 +47,9 @@ function _getRangeIterator(rangeConfig) {
 
     let pushCount = 0;
 
-    const [startVal, endVal] = reverse ? [end - 1, start] : [start, end];
+    const [startVal, endVal] = getStartAndEndValue(start, end, step, reverse);
     
+
     function iter() {
         let element = startVal;
 
@@ -54,12 +58,14 @@ function _getRangeIterator(rangeConfig) {
                 const { value, newElement } = _generateValue(element, transforms, endVal, reverse);
                 element = newElement;
 
-                if (withinBounds(element, endVal, reverse) && underLimit(pushCount, limit) && !takeUntil(value)) {
+                if (withinBounds(element, endVal, reverse, step < 0) && underLimit(pushCount, limit) && !takeUntil(value)) {
                     pushCount++;
-                    element = updateValue(element, reverse);
+                    element = updateValue(element, reverse, step);
                     return { value, done: false };
                 }
 
+                // Replay-ability of limited range iterators.
+                pushCount = 0;
                 return { done: true };
             }
         }
@@ -77,13 +83,31 @@ function _getRangeIterator(rangeConfig) {
  *                           reverse, filter, or limit (limit) the range output 
  *                           { limit(num), map(fn), filter(fn) [Symbol.iterator] }
  */
-export default function range(start = 0, end) {
+export default function range(start, end, step) {
     if (end === undefined || end === null) {
-        end = start;
+        end = start || 0;
+        start = 0;
+
+        if (!step && end < 0) {
+            step = -1;
+        }
+    }
+
+    if (start === null) {
         start = 0;
     }
 
-    const getNewConfig = initializeRangeConfig(start, end);
+    if (step === undefined || step === null) {
+        step = 1;
+    }
+
+    if (hasInvalidParameters(start, end, step)) {
+        start = 0;
+        end = 0;
+        step = 1;
+    }
+
+    const getNewConfig = initializeRangeConfig(start, end, step);
 
     const rangeObject = {
         limit(num) {

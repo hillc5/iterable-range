@@ -7,6 +7,7 @@ npm i --save iterable-range
 ```
 
 ## Usage
+**range(*start*, *end*, *step[optional]*)**
 
 ### Quick creation
 ```javascript
@@ -24,6 +25,21 @@ const r2 = range(5) // Single argument, defaults initial value to 0
 
 [...r2] // [0, 1, 2, 3, 4]
 
+```
+
+### Using *step* parameter
+```javascript
+import range from 'iterable-range';
+
+const r = range(1, 10, 2);
+
+[...r]           // [1, 3, 5 ,7, 9]
+[...r.reverse()] // [9, 7, 5, 3, 1]
+
+const r = range(10, -10, -5);
+
+[...r]              // [10, 5, 0, -5]
+[...r.reverse()]    // [-5, 0, 5, 10]
 ```
 
 ## Methods
@@ -53,6 +69,12 @@ const r = range(1, 5);
 // Can have multiple applications
 
 [...r.map(val => val * val).map(val => val % 2 === 0 ? 0 : 1)] // [1, 0, 1, 0]
+
+// Works as expected when a step value is provided
+const rWithStep = range(1, 10, 2);
+
+[...rWithStep]                        // [1, 3, 5, 7, 9]
+[...rWithStep.map(val => val * val)]  // [1, 9, 25, 49, 81]
 
 ```
 
@@ -95,6 +117,13 @@ const r = range(1, 10);
 [...r.reverse()] // [9, 8, 7, 6, 5, 4, 3, 2, 1]
 
 [...r.map(val => val * val).limit(5).reverse()] // [25, 16, 9, 4 ,1]
+
+// if step is provided reverse still returns the exact reverse of the normal output
+
+const rWithStep = range(-20, 42, 7);
+
+[...rWithStep]              // [-20, -13, -6, 1, 8, 15, 22, 29, 36]
+[...rWithStep.reverse()]    // [36, 29, 22, 15, 8, 1, -6, -13, -20]
 
 ```
 
