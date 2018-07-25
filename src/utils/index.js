@@ -27,3 +27,11 @@ export function hasInvalidParameters(start, end, step) {
     const diff = end - start;
     return diff > 0 && step < 0 || diff < 0 && step > 0;
 }
+
+export function isIterable(iter) {
+    if (iter === null || iter === undefined) {
+        return false;
+    }
+
+    return typeof iter[Symbol.iterator] === 'function';
+}

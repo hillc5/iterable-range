@@ -1,12 +1,12 @@
 # iterable-range
 The iterable-range module provides iterable range creation functionality with a number of helper methods.  Created ranges are lazily evaluated and thus all transforms/modifiers are applied only as needed.  Created ranges include the start but not the end values supplied in the parameters
 
-## Installation
+# Installation
 ```bash
 npm i --save iterable-range
 ```
 
-## Usage
+# Usage
 **range(*start*, *end*, *step[optional]*)**
 
 ### Quick creation
@@ -27,6 +27,7 @@ const r2 = range(5) // Single argument, defaults initial value to 0
 
 ```
 
+
 ### Using *step* parameter
 ```javascript
 import range from 'iterable-range';
@@ -36,13 +37,27 @@ const r = range(1, 10, 2);
 [...r]           // [1, 3, 5 ,7, 9]
 [...r.reverse()] // [9, 7, 5, 3, 1]
 
-const r = range(10, -10, -5);
+const r2 = range(10, -10, -5);
 
-[...r]              // [10, 5, 0, -5]
-[...r.reverse()]    // [-5, 0, 5, 10]
+[...r2]              // [10, 5, 0, -5]
+[...r2.reverse()]    // [-5, 0, 5, 10]
 ```
 
-## Methods
+### Replay-ability
+An iterable range can be re-ran an infinite number of times, producing the same values each time.  A normal iterator will only be able to be ran once, producing the *done* for any subsequent runs after the first.  A range will
+just re-run as if it was just initialized.
+```javascript
+import range from 'iterable-range';
+
+const r = range(0, 100, 20);
+[...r] // [0, 20, 40, 60, 80];
+[...r] // [0, 20, 40, 60, 80];
+...
+...
+[...r] // You get the idea
+```
+
+# Methods
 Every method applied to an iterable range returns a new iterable range, preserving the original.
 ```javascript
 const r = range(1, 5);
@@ -137,5 +152,31 @@ const r = range(1, 10);
 
 [...r.takeUntil(val => val > 6)] // [1, 2, 3, 4, 5, 6]
 [...r.takeUntil(val => val === 25).map(val =>  val * val)] // [1, 4, 9, 16]
+
+```
+
+# Operators
+Operators are added utility methods that may or may not be restricted to usage with iterable ranges.
+
+### zip
+**Parameters: *...Iterable(s)*** - Any number of iterable(s).
+**Throws: *TypeError*** - If any given argument is not an iterable.
+
+zip returns an iterable that will produce the interleaved values of the provided iterables.  It will produce its values from the iterables in the order that they are passed into the function.  It will continue to produce values until all given iterables have exhausted there values.
+
+**Note** The iterable returned by the zip function will only produce values one time.  Any subsequent call after the initial call will return *{ done: true }*
+**Note** Any iterables passed in that are not *replay-able* will also be exhausted
+
+```javascript
+import { zip } from 'iterable-range/operators';
+
+const i1 = [1, 2, 3, 4];
+const i2 = [4, 3, 2, 1];
+
+[...zip(i1, i2)] // [1, 4, 2, 3, 3, 2, 4, 1];
+
+const i3 = [1, 2, 3, 4, 6, 6, 6];
+
+[...zip(i3, i2)] // [1, 4, 2, 3, 3, 2, 4, 1, 6, 6, 6];
 
 ```
