@@ -1,6 +1,24 @@
 # iterable-range
 The iterable-range module provides iterable range creation functionality with a number of helper methods.  Created ranges are lazily evaluated and thus all transforms/modifiers are applied only as needed.  Created ranges include the start but not the end values supplied in the parameters
 
+# Contents
+* [Installation](#installation)
+* [Usage](#usage)
+  * [Quick creation](#quick-creation)
+  * [Using *step* parameter](#using-step-parameter)
+  * [Replay-ability](#replay-ability)
+* [Methods](#methods)
+  * [map](#map)
+  * [filter](#filter)
+  * [limit](#limit)
+  * [reverse](#reverse)
+  * [takeUntil](#takeUntil)
+  * [contains](#contains)
+  * [length](#length)
+* [Operators](#operators)
+  * [zip](#zip)
+  * [distinct](#distince)
+
 # Installation
 ```bash
 npm i --save iterable-range
