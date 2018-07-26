@@ -38,7 +38,7 @@ test('distinct - should work on ranges, and zip iterators', t => {
     const r3 = range(-10, 10).map(val => Math.abs(val));
 
     const absExpected = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0];
-    t.isEquivalent([...r3], absExpected);
+    t.isEquivalent([...distinct(r3)], absExpected);
     t.end();
 
 })
