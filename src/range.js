@@ -149,6 +149,16 @@ export default function range(start, end, step) {
             };
         },
 
+        contains(num) {
+            const numWithinStart = step > 0 ? num >= start : num <= start;
+            const numWithinEnd = step > 0 ? num < end : num > end;
+            return (numWithinStart && numWithinEnd) && (num - start) % step === 0;
+        },
+
+        length() {
+            return Math.ceil((end - start) / step);
+        },
+
         [Symbol.iterator]: _getRangeIterator(getNewConfig())
     }
 

@@ -298,3 +298,46 @@ test('range - should not produce any values if limit is called with a negative n
     t.isEquivalent([...range(start, end).limit(-1)], expected);
     t.end();
 });
+
+test('range - should return the correct number of values to be produced when length() is called', t => {
+    const r1 = range(10);
+    t.equals(r1.length(), [...r1].length);
+
+    const r2 = range(-10, 10);
+    t.equals(r2.length(), [...r2].length);
+
+    const r3 = range(-25);
+    t.equals(r3.length(), [...r3].length);
+
+    const r4 = range(3, 42, 7);
+    t.equals(r4.length(), [...r4].length);
+
+    const r5 = range(-21, -1234, -31);
+    t.equals(r5.length(), [...r5].length);
+
+    t.end();
+});
+
+test('range - should determine if any given value will be included in the initial ranges produced values using contains', t => {
+    const r1 = range(10);
+    t.equals(r1.contains(3), true);
+    t.equals(r1.contains(10), false);
+
+    const r2 = range(-20);
+    t.equals(r2.contains(-17), true);
+    t.equals(r2.contains(1), false);
+
+    const r3 = range(1, 20, 5);
+    t.equals(r3.contains(5), false);
+    t.equals(r3.contains(6), true);
+
+    const r4 = range(-10, 10, 2);
+    t.equals(r4.contains(-8), true);
+    t.equals(r4.contains(10), false);
+
+    const r5 = range(-20, -23423, -2343);
+    t.equals(r5.contains(-7049), true);
+    t.equals(r5.contains(-40000), false);
+
+    t.end();
+});

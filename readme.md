@@ -143,7 +143,9 @@ const rWithStep = range(-20, 42, 7);
 ```
 
 ### takeUntil
-**Parameters: *takeUntilFn*** - A function that indicates when the range iterator should stop producing values.  If takeUntilFn returns *truthy* for any value then the range iterator will disregard that value and stop producing values.  
+**Parameters: *takeUntilFn*** - A function that indicates when the range iterator should stop producing values.  
+
+If takeUntilFn returns *truthy* for any value then the range iterator will disregard that value and stop producing values.  
 
 **Note** No matter where the .takeUntil method is called, it will be applied after all transforms have been applied to any value.
 
@@ -152,6 +154,52 @@ const r = range(1, 10);
 
 [...r.takeUntil(val => val > 6)] // [1, 2, 3, 4, 5, 6]
 [...r.takeUntil(val => val === 25).map(val =>  val * val)] // [1, 4, 9, 16]
+
+```
+
+
+### contains
+**Parameters: *num*** - Number to check whether it will be produced by the base range iterable.  
+
+contains will produce true or false if the given num is going to be produced by the initially created range (the range that has not had any other method applied to it)  
+
+```javascript
+const r1 = range(10);
+r1.contains(3)  // true
+r1.contains(10) // false
+
+const r2 = range(-10);
+r2.contains(-3)  // true
+r2.contains(-10) // false
+r2.contains(3)   // false
+
+const r3 = range(-10, 10, 5);
+r3.contains(-10)  // true
+r3.contains(-8)   // false
+r3.contains(0)    // true
+r3.contains(10)   // false
+
+```
+
+
+### length
+Returns the number of values that will be produced by the base range iterable.  Calling length will return the number of items that will be produced.  This is done in constant *O(1)* time and does not iterate over the values, or store them in another data structure to determine the length
+
+```javascript
+const r1 = range(1, 10);
+r1.length()  // 9
+
+const r2 = range(10);
+r2.length()  // 10
+
+const r3 = range(1, 20, 2);
+r3.length()  // 10
+
+const r4 = range(-10, -32, -3);
+r4.length()  // 8
+
+const r5 = range(1, Infinity);
+r5.length()  // Infinity
 
 ```
 
