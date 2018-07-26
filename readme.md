@@ -241,7 +241,7 @@ const i3 = [1, 2, 3, 4, 6, 6, 6];
 distinct returns an iterable that will produce only unique values.  Any duplicates found in the given iterable will only be returned once, all others will be discarded.
 
 **Note** distinct will exhaust any non-replayable iterable that is operated on.  
-**Note** distince uses a Set internally and could potentially use memory-space O(m) (m = total number of produced values)
+**Note** distinct uses a Set internally and could potentially use memory-space O(m) (m = total number of produced values)
 
 ```javascript
 import range, { zip, distinct } from 'iterable-range';
