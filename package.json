@@ -1,6 +1,6 @@
 {
   "name": "iterable-range",
-  "version": "3.4.0",
+  "version": "3.4.1",
   "description": "Sequential positive range iterator with map, filter, and take helper functions",
   "main": "lib",
   "scripts": {
