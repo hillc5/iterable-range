@@ -168,7 +168,12 @@ zip returns an iterable that will produce the interleaved values of the provided
 **Note** Any iterables passed in that are not *replay-able* will also be exhausted
 
 ```javascript
-import { zip } from 'iterable-range';
+import range, { zip } from 'iterable-range';
+
+const r1 = range(1, 10, 2);
+const r2 = range(1, 20, 4);
+
+[...zip(r1, r2)] // [1, 1, 3, 5, 5, 9, 7, 13, 9, 17]
 
 const i1 = [1, 2, 3, 4];
 const i2 = [4, 3, 2, 1];
@@ -178,5 +183,26 @@ const i2 = [4, 3, 2, 1];
 const i3 = [1, 2, 3, 4, 6, 6, 6];
 
 [...zip(i3, i2)] // [1, 4, 2, 3, 3, 2, 4, 1, 6, 6, 6];
+
+```
+
+### distinct
+**Parameters: *Iterable*** - Any item that implements the iterable protocol
+**Throws: *TypeError*** - If parameter does not implement the iterable protocol
+
+distinct returns an iterable that will produce only unique values.  Any duplicates found in the given iterable will only be returned once, all others will be discarded.
+
+**Note** distinct will exhaust any non-replayable iterable that is operated on.
+
+```javascript
+import range, { zip, distinct } from 'iterable-range';
+
+const r1 = range(1, 20, 2);
+const r2 = range(1, 20, 4);
+const z = zip(r1, r2);
+
+[...distinct(z)] // [1, 3, 5, 9, 7, 13, 17, 11, 15, 19]
+
+[...distinct('Hello World!')] // ['H', 'e', 'l', 'o', ' ', 'W', 'r', 'd', '!']
 
 ```
