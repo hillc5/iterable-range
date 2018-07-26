@@ -161,7 +161,7 @@ const r = range(1, 10);
 ### contains
 **Parameters: *num*** - Number to check whether it will be produced by the base range iterable.  
 
-contains will produce true or false if the given num is going to be produced by the initially created range (the range that has not had any other method applied to it)  
+contains will produce true or false if the given num is going to be produced by the initially created range (the range that has not had any other method applied to it).  This is done in constant *O(1)* time and does not iterate over the produced range, or store anything in another data structure in order to determine if the value will be produced
 
 ```javascript
 const r1 = range(10);
@@ -240,7 +240,8 @@ const i3 = [1, 2, 3, 4, 6, 6, 6];
 
 distinct returns an iterable that will produce only unique values.  Any duplicates found in the given iterable will only be returned once, all others will be discarded.
 
-**Note** distinct will exhaust any non-replayable iterable that is operated on.
+**Note** distinct will exhaust any non-replayable iterable that is operated on.  
+**Note** distince uses a Set internally and could potentially use memory-space O(m) (m = total number of produced values)
 
 ```javascript
 import range, { zip, distinct } from 'iterable-range';
