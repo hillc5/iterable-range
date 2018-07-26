@@ -168,7 +168,7 @@ zip returns an iterable that will produce the interleaved values of the provided
 **Note** Any iterables passed in that are not *replay-able* will also be exhausted
 
 ```javascript
-import { zip } from 'iterable-range/operators';
+import { zip } from 'iterable-range';
 
 const i1 = [1, 2, 3, 4];
 const i2 = [4, 3, 2, 1];
