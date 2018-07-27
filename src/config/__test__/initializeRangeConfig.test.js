@@ -71,7 +71,7 @@ test('initializeRangeConfig - should maintain config state across updates', t =>
     t.equal(initConfig.reverse, true);
     t.equal(initConfig.limit, 5);
 
-    const newConfig = update({ transforms: [ 'test2' ]});
+    const newConfig = update({ transforms: [ 'test2' ] });
     t.isEquivalent(newConfig.transforms, [ 'test1', 'test2' ]);
     t.notEquivalent(newConfig.transforms, initConfig.transforms);
     t.end();

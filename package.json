@@ -4,7 +4,8 @@
   "description": "Sequential positive range iterator with map, filter, and take helper functions",
   "main": "lib",
   "scripts": {
-    "test": "nyc npm run run-tests",
+    "lint": "./node_modules/.bin/eslint src",
+    "test": "npm run lint && nyc npm run run-tests",
     "run-tests": "babel-tape-runner **/*.test.js | faucet",
     "build": "rm -rf ./lib && babel src --out-dir lib --ignore test.js",
     "prepare": "npm run test && npm run build"
@@ -37,10 +38,14 @@
   "homepage": "https://github.com/hillc5/range-iterator#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.2.6",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-regenerator": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-tape-runner": "^2.0.1",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-plugin-import": "^2.13.0",
     "faucet": "0.0.1",
     "nyc": "^12.0.2",
     "sinon": "^6.1.3",

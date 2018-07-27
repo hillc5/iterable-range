@@ -9,4 +9,3 @@ import TRANSFORM_TYPES from './transform-types';
 export default function generateTransform(type = TRANSFORM_TYPES.MAP, fn) {
     return { type, transform: fn };
 }
-

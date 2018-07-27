@@ -11,7 +11,7 @@ export default function initializeRangeConfig(start, end, step = 1) {
 
     return (...args) => {
         if (!args.length) {
-            return config
+            return config;
         }
 
         const [ update ] = args;
@@ -24,7 +24,7 @@ export default function initializeRangeConfig(start, end, step = 1) {
             ...config,
             ...update
         };
-        
+
         return config;
-    }
-};
+    };
+}

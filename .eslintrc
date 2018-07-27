@@ -1,0 +1,19 @@
+{
+  "parser": "babel-eslint",
+  "rules": {
+    "arrow-parens": 0,
+    "indent": ["error", 4, {"SwitchCase": 1}],
+    "comma-dangle": 0,
+    "array-bracket-spacing": 0,
+    "no-underscore-dangle": 0,
+    "no-restricted-syntax": 0,
+    "operator-linebreak": 0,
+    "no-param-reassign": 0,
+    "no-nested-ternary": 0,
+    "no-restricted-globals": 0
+  },
+  "extends": "airbnb-base",
+  "env": {
+    "browser": true
+  }
+}

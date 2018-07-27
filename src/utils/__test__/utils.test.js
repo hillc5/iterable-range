@@ -1,12 +1,12 @@
 import test from 'tape';
 
-import { 
-    withinBounds, 
-    underLimit, 
-    updateValue, 
-    getStartAndEndValue, 
-    hasInvalidParameters, 
-    isIterable 
+import {
+    withinBounds,
+    underLimit,
+    updateValue,
+    getStartAndEndValue,
+    hasInvalidParameters,
+    isIterable
 } from '..';
 
 test('withinBounds - should return true for an index less than a given end if reverse is false', t => {
@@ -67,7 +67,9 @@ test('getStartAndEndValue - should return a value that would be equal to the las
     const step = 3;
     const reverse = true;
 
-    const expected = [7, 1] // produced values for this range would be [1, 4, 7] so start needs to be 7
+    // produced values for this range would be [1, 4, 7] so start needs to be 7
+    const expected = [7, 1];
+
     t.isEquivalent(getStartAndEndValue(start, end, step, reverse), expected);
     t.end();
 });
@@ -165,7 +167,7 @@ test('isIterable -should return true for an iterable, false if not', t => {
     t.equal(isIterable(null), false);
     t.equal(isIterable(2), false);
     t.equal(isIterable(true), false);
-    t.equal(isIterable({ 'a': false }), false);
-    t.equal(isIterable({ [Symbol.iterator]: () => {}}), true);
+    t.equal(isIterable({ a: false }), false);
+    t.equal(isIterable({ [Symbol.iterator]: () => {} }), true);
     t.end();
 });

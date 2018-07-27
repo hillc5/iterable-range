@@ -72,7 +72,7 @@ test('applyTransforms - should return undefined if a single filter transform ret
     t.end();
 });
 
-test('applyTransforms - should return the index if a single filter transform returns truthy',  t => {
+test('applyTransforms - should return the index if a single filter transform returns truthy', t => {
     const index = 5;
     const transforms = [
         {
@@ -90,7 +90,7 @@ test('applyTransforms - should return the index if a single filter transform ret
 test('applyTransforms - should not call any waiting transforms if any preceding filter function returns falsy', t => {
     const mapFn = sinon.stub();
     const index = 0;
-    const filterFn = val => false;
+    const filterFn = () => false;
 
     const transforms = [
         {

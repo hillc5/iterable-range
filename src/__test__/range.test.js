@@ -22,7 +22,6 @@ test('range - should return an iterable that produces all values from 0 to a giv
 test('range - should return an iterable that produces all values from 0 to a given POSITIVE end (non-inclusive) if a start is null, end is not', t => {
     const expected = [0, 1, 2, 3, 4];
     const end = 5;
-    const start = null;
 
     t.isEquivalent([...range(null, end)], expected);
     t.end();
@@ -176,7 +175,7 @@ test('range - should produce mapped values over the given start to end (non-incl
     t.end();
 });
 
-test('range - should only produce values that return a truthy value from a filtering function if .filter is called', t =>  {
+test('range - should only produce values that return a truthy value from a filtering function if .filter is called', t => {
     const filterFn = val => val % 2;
     const start = 1;
     const end = 5;
@@ -199,7 +198,7 @@ test('range - should produced a reversed set of values if reverse is called', t 
 
 test('range - should only produce the number of values equal to a threshold defined by .limit', t => {
     const start = 1;
-    const end =  100;
+    const end = 100;
     const limitValue = 10;
 
     const expected = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
@@ -215,7 +214,7 @@ test('range - should apply filter to transformed values if it is applied after m
     const start = 1;
     const end = 10;
 
-    const expected =  [ 1, 4, 9, 16, 25 ];
+    const expected = [ 1, 4, 9, 16, 25 ];
 
     t.isEquivalent([...range(start, end).map(mapFn).filter(filterFn)], expected);
     t.end();
@@ -259,18 +258,18 @@ test('range - should stop producing values once takeUntil returns true', t => {
 
 test('range - stop producing values if the takeUntil function returns true, regardless of where in the chain it is called', t => {
     const takeUntil = val => val === 49;
-        const start = 1;
-        const end = 10;
+    const start = 1;
+    const end = 10;
 
-        const expected = [ 1, 4, 9, 16, 25, 36 ];
+    const expected = [ 1, 4, 9, 16, 25, 36 ];
 
-        t.isEquivalent([...range(start, end).takeUntil(takeUntil).map(val => val * val)], expected);
-        t.end();
+    t.isEquivalent([...range(start, end).takeUntil(takeUntil).map(val => val * val)], expected);
+    t.end();
 });
 
 test('range - should not produce any values if start is after end', t => {
     const start = 10;
-    const end = 0
+    const end = 0;
 
     const expected = [];
 

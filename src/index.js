@@ -1,4 +1,4 @@
-import "regenerator-runtime/runtime";
+import 'regenerator-runtime/runtime';
 
-export {default} from './range.js';
+export { default } from './range';
 export * from './operators';
