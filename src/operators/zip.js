@@ -1,4 +1,4 @@
-import "regenerator-runtime/runtime";
+import 'regenerator-runtime/runtime';
 import { isIterable } from '../utils';
 
 function _getZipIterator(iters) {

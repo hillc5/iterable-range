@@ -16,6 +16,7 @@ The iterable-range module provides iterable range creation functionality with a 
   * [contains](#contains)
   * [length](#length)
 * [Operators](#operators)
+  * [concat](#concat)
   * [zip](#zip)
   * [distinct](#distince)
 
@@ -224,9 +225,32 @@ r5.length()  // Infinity
 # Operators
 Operators are added utility methods that may or may not be restricted to usage with iterable ranges.
 
+### concat
+**Parameters: *...Iterable(s)*** -  Any number of iterables.  
+**Throws: *TypeError*** - If any given argument is not an iterable.  
+ 
+concat returns an iterable that will produce values from each iterator.  The values produced will be from only one iterable at a time, until it has been exhausted.  The ordering will be in the same order that the iterables are provided  
+
+```javascript
+import range, { concat } from 'iterable-range';
+
+const r1 = range(0, 10, 2);
+const r2 = range(8, -1, -2);
+
+[...concat(r1, r2)]  // [0, 2, 4, 6, 8, 8, 6, 4, 2, 0]
+
+
+const iter1 = 'hello ';
+const iter2 = 'world';
+
+[...concat(iter1, iter2)] // ['h', 'e', 'l', 'l'. 'o', ' ', 'w', 'o', 'r', 'l', 'd'];
+
+```
+
+
 ### zip
-**Parameters: *...Iterable(s)*** - Any number of iterable(s).
-**Throws: *TypeError*** - If any given argument is not an iterable.
+**Parameters: *...Iterable(s)*** - Any number of iterable(s).  
+**Throws: *TypeError*** - If any given argument is not an iterable.  
 
 zip returns an iterable that will produce the interleaved values of the provided iterables.  It will produce its values from the iterables in the order that they are passed into the function.  It will continue to produce values until all given iterables have exhausted there values.
 
@@ -253,8 +277,8 @@ const i3 = [1, 2, 3, 4, 6, 6, 6];
 ```
 
 ### distinct
-**Parameters: *Iterable*** - Any item that implements the iterable protocol
-**Throws: *TypeError*** - If parameter does not implement the iterable protocol
+**Parameters: *Iterable*** - Any item that implements the iterable protocol  
+**Throws: *TypeError*** - If parameter does not implement the iterable protocol  
 
 distinct returns an iterable that will produce only unique values.  Any duplicates found in the given iterable will only be returned once, all others will be discarded.
 
