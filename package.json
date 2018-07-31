@@ -1,7 +1,7 @@
 {
   "name": "iterable-range",
   "version": "3.6.4",
-  "description": "Sequential positive range iterator with map, filter, and take helper functions",
+  "description": "range iterator with step, map, filter, and other userful helper functions and operators.  All values lazy-loaded",
   "main": "lib",
   "scripts": {
     "lint": "./node_modules/.bin/eslint src",
