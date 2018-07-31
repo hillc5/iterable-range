@@ -7,6 +7,7 @@ The iterable-range module provides iterable range creation functionality with a 
   * [Quick creation](#quick-creation)
   * [Using *step* parameter](#using-step-parameter)
   * [Replay-ability](#replay-ability)
+  * [Import with CommonJS](#import-using-commonjs)
 * [Methods](#methods)
   * [map](#map)
   * [filter](#filter)
@@ -74,6 +75,13 @@ const r = range(0, 100, 20);
 ...
 ...
 [...r] // You get the idea
+```
+
+### Import using CommonJS
+```javascript
+// For commonjs (for now)
+const range = require('iterable-range').default
+const { concat, zip, distinct } = require('iterable-range');
 ```
 
 # Methods
