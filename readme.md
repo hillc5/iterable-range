@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/hillc5/iterable-range.svg?branch=master)](https://travis-ci.org/hillc5/iterable-range)
+
 # iterable-range
 The iterable-range module provides iterable range creation functionality with a number of helper methods.  Created ranges are lazily evaluated and thus all transforms/modifiers are applied only as needed.  Created ranges include the start but not the end values supplied in the parameters
 
