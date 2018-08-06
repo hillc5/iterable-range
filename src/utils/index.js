@@ -1,3 +1,5 @@
+import 'regenerator-runtime/runtime';
+
 export function withinBounds(index, end, reverse, negativeStep) {
     return negativeStep
         ? reverse ? index <= end : index > end
@@ -35,4 +37,42 @@ export function isIterable(iter) {
     }
 
     return typeof iter[Symbol.iterator] === 'function';
+}
+
+export function combineIterators(iters) {
+    if (!Array.isArray(iters)) {
+        throw new TypeError('The first argument must be of type Array');
+    }
+
+    if (iters.some(iter => !isIterable(iter))) {
+        throw new TypeError('All elements in the given list must implement the iterable protocol');
+    }
+
+    const iterators = iters.reduce((iteratorDict, iter, index) => {
+        iteratorDict[index] = iter[Symbol.iterator]();
+        return iteratorDict;
+    }, {});
+
+    const terminatedIterators = {};
+
+    function* comboGenerator() {
+        while (Object.keys(terminatedIterators).length < iters.length) {
+            const result = [];
+            Object.values(iterators).forEach((iterator, index) => {
+                const { value, done } = iterator.next();
+
+                if (done) {
+                    terminatedIterators[index] = true;
+                } else {
+                    result.push(value);
+                }
+            });
+
+            if (result.length) {
+                yield result;
+            }
+        }
+    }
+
+    return comboGenerator();
 }

@@ -6,7 +6,8 @@ import {
     updateValue,
     getStartAndEndValue,
     hasInvalidParameters,
-    isIterable
+    isIterable,
+    combineIterators
 } from '..';
 
 test('withinBounds - should return true for an index less than a given end if reverse is false', t => {
@@ -169,5 +170,84 @@ test('isIterable -should return true for an iterable, false if not', t => {
     t.equal(isIterable(true), false);
     t.equal(isIterable({ a: false }), false);
     t.equal(isIterable({ [Symbol.iterator]: () => {} }), true);
+    t.end();
+});
+
+test('combineIterators - should return an iterable', t => {
+    const iter1 = [1, 2, 3];
+    const iter2 = ['a', 'b', 'c'];
+    const iter3 = 'Charlie';
+
+    const combinedIter = combineIterators([iter1, iter2, iter3]);
+
+    t.isEqual(isIterable(combinedIter), true);
+    t.end();
+});
+
+test('combineIterators - should produce an array of combined values from each iterator for each call to .next', t => {
+    const iter1 = [1, 2, 3];
+    const iter2 = ['a', 'b', 'c'];
+    const iter3 = 'Charlie';
+
+    const combinedIter = combineIterators([iter1, iter2, iter3]);
+
+    t.isEqual(isIterable(combinedIter), true);
+    t.isEquivalent(combinedIter.next().value, [1, 'a', 'C']);
+    t.end();
+});
+
+test('combineIterators - should produce arrays as values for each iterator included, until all iterators are exhausted', t => {
+    const iter1 = [1, 2, 3];
+    const iter2 = [1, 2];
+    const iter3 = 'Lisa';
+
+    const expectedValues = [
+        [1, 1, 'L'],
+        [2, 2, 'i'],
+        [3, 's'],
+        ['a']
+    ];
+
+    const combinedIter = combineIterators([iter1, iter2, iter3]);
+
+    t.isEquivalent([...combinedIter], expectedValues);
+    t.end();
+});
+
+test('combineIterators - should throw a TypeError if an array is not passed in', t => {
+    const param = 42;
+
+    t.throws(() => { combineIterators(param); });
+    t.end();
+});
+
+test('combineIterators - should throw a TypeError if any item in the given array is not iterable', t => {
+    const iter1 = [1, 2, 3, 4];
+    const iter2 = 'Charlie is Iterable';
+    const nonIter = 42;
+
+    t.throws(() => { combineIterators([iter1, iter2, nonIter]); });
+    t.end();
+});
+
+test('combineIterators - should work for a single iterable', t => {
+    const iter1 = 'Charlie';
+    const expected = [
+        ['C'],
+        ['h'],
+        ['a'],
+        ['r'],
+        ['l'],
+        ['i'],
+        ['e']
+    ];
+
+    t.isEquivalent([...combineIterators([iter1])], expected);
+    t.end();
+});
+
+test('combineIterators - should work for an empty array', t => {
+    const expected = [];
+    t.isEquivalent([...combineIterators([])], expected);
     t.end();
 });

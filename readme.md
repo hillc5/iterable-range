@@ -19,6 +19,7 @@ The iterable-range module provides iterable range creation functionality with a 
   * [contains](#contains)
   * [length](#length)
 * [Operators](#operators)
+  * [combine](#combine)
   * [concat](#concat)
   * [zip](#zip)
   * [distinct](#distince)
@@ -234,6 +235,30 @@ r5.length()  // Infinity
 
 # Operators
 Operators are added utility methods that may or may not be restricted to usage with iterable ranges.
+
+### combine
+**Parameters: *iters*** - Array of iterables
+**Parameters: *combineFn*** - function that maps from an array of values, to some other value(s)
+**Throws: *TypeError*** - if **iters** is not an array
+**Throws: *TypeError*** - if any element in **iters** is not an iterable
+
+combine takes an array of iterables and produces a new iterable that combines the values from each iterable, either as an array of each value from each iterable, or as a new value that has been mapped by the given combineFn.  The values that are stored in the returned array represent the value that is produced by each given iterable at that position in its iterator.  
+
+The given **combineFn** will be passed the array of combined values, and can return any output that it desires.
+
+```javascript
+const iter1 = [1, 2, 3];
+const iter2 = [4, 5, 6];
+
+const iters = [iter1, iter2];
+
+[...combine(iters)] // [[1, 4], [2, 5], [3, 6]]
+
+const sum = values => values.reduce((result, value) => result + value, 0);
+
+[...combine(iters, sum)] // [5, 7, 9];
+
+```
 
 ### concat
 **Parameters: *...Iterable(s)*** -  Any number of iterables.  
