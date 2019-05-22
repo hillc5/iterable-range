@@ -22,7 +22,9 @@ function _getDistinctIterator(iter) {
  */
 export default function distinct(iter) {
     if (!isIterable(iter)) {
-        throw new TypeError('distinct requires that its argument implements the iterable protocol.');
+        throw new TypeError(
+            'distinct requires that its argument implements the iterable protocol.'
+        );
     }
 
     return {

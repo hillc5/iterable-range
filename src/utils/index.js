@@ -1,26 +1,54 @@
 import 'regenerator-runtime/runtime';
 
+export function returnFalse() {
+    return false;
+}
+
+export function getNewConfig(config, ...args) {
+    if (!args.length) {
+        return config;
+    }
+
+    const [update] = args;
+
+    if (update.transforms) {
+        update.transforms = [...config.transforms, ...update.transforms];
+    }
+
+    config = {
+        ...config,
+        ...update
+    };
+
+    return config;
+}
+
 export function withinBounds(index, end, reverse, negativeStep) {
+    /* eslint-disable indent */
     return negativeStep
-        ? reverse ? index <= end : index > end
-        : reverse ? index >= end : index < end;
+        ? reverse
+            ? index <= end
+            : index > end
+        : reverse
+        ? index >= end
+        : index < end;
 }
 
 export function updateValue(index, decrement, step = 1) {
-    return decrement ? (index - step) : (index + step);
+    return decrement ? index - step : index + step;
 }
 
 export function underLimit(pushCount, limit) {
-    return (limit === undefined || pushCount < limit);
+    return limit === undefined || pushCount < limit;
 }
 
 export function getStartAndEndValue(start, end, step, reverse) {
     if (reverse) {
         const diff = (end - start) % step || step;
-        return [ end - diff, start ];
+        return [end - diff, start];
     }
 
-    return [ start, end ];
+    return [start, end];
 }
 
 export function hasInvalidParameters(start, end, step) {
@@ -45,7 +73,9 @@ export function combineIterators(iters) {
     }
 
     if (iters.some(iter => !isIterable(iter))) {
-        throw new TypeError('All elements in the given list must implement the iterable protocol');
+        throw new TypeError(
+            'All elements in the given list must implement the iterable protocol'
+        );
     }
 
     const iterators = iters.reduce((iteratorDict, iter, index) => {

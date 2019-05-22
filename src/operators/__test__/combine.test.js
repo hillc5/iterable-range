@@ -3,12 +3,16 @@ import test from 'tape';
 import combine from '../combine';
 
 test('combine - should throw an error if an array is not passed in as the argument', t => {
-    t.throws(() => { combine(); });
+    t.throws(() => {
+        combine();
+    });
     t.end();
 });
 
 test('combine - should throw an error if any item in the given array is not an iterable', t => {
-    t.throws(() => { combine([42]); });
+    t.throws(() => {
+        combine([42]);
+    });
     t.end();
 });
 

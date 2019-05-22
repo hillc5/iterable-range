@@ -1,6 +1,6 @@
 import test from 'tape';
 
-import range from '../range';
+import range from '..';
 
 test('range - should return an iterable that produces all values from the given start (inclusive) to the given end (non-inclusive)', t => {
     const expected = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -163,13 +163,37 @@ test('range - should return a new iterable any time the takeUntil method is call
     t.end();
 });
 
+test('range - should truly be replayable and successive transformation calls should not cache', t => {
+    const r = range(1, 10);
+    t.isEquivalent([...r.takeUntil(val => val > 5)], [1, 2, 3, 4, 5]);
+    t.isEquivalent([...r], [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    t.isEquivalent(
+        [...r.takeUntil(val => val === 25).map(val => val * val)],
+        [1, 4, 9, 16]
+    );
+    t.isEquivalent([...r], [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    t.isEquivalent(
+        [...r.map(val => val * val)],
+        [1, 4, 9, 16, 25, 36, 49, 64, 81]
+    );
+    t.isEquivalent(
+        [
+            ...r
+                .filter(val => val !== 3)
+                .map(val => val * val)
+                .takeUntil(val => val > 36)
+        ],
+        [1, 4, 16, 25, 36]
+    );
+    t.end();
+});
 
 test('range - should produce mapped values over the given start to end (non-inclusive) range if .map is called', t => {
     const mapFn = val => val * val;
     const start = 1;
     const end = 5;
 
-    const expected = [ 1, 4, 9, 16 ];
+    const expected = [1, 4, 9, 16];
 
     t.isEquivalent([...range(start, end).map(mapFn)], expected);
     t.end();
@@ -180,7 +204,7 @@ test('range - should only produce values that return a truthy value from a filte
     const start = 1;
     const end = 5;
 
-    const expected = [ 1, 3 ];
+    const expected = [1, 3];
 
     t.isEquivalent([...range(start, end).filter(filterFn)], expected);
     t.end();
@@ -190,7 +214,7 @@ test('range - should produced a reversed set of values if reverse is called', t 
     const start = 1;
     const end = 10;
 
-    const expected = [ 9, 8, 7, 6, 5, 4, 3, 2, 1 ];
+    const expected = [9, 8, 7, 6, 5, 4, 3, 2, 1];
 
     t.isEquivalent([...range(start, end).reverse()], expected);
     t.end();
@@ -201,7 +225,7 @@ test('range - should only produce the number of values equal to a threshold defi
     const end = 100;
     const limitValue = 10;
 
-    const expected = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
+    const expected = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
     t.isEquivalent([...range(start, end).limit(limitValue)], expected);
     t.end();
@@ -214,9 +238,16 @@ test('range - should apply filter to transformed values if it is applied after m
     const start = 1;
     const end = 10;
 
-    const expected = [ 1, 4, 9, 16, 25 ];
+    const expected = [1, 4, 9, 16, 25];
 
-    t.isEquivalent([...range(start, end).map(mapFn).filter(filterFn)], expected);
+    t.isEquivalent(
+        [
+            ...range(start, end)
+                .map(mapFn)
+                .filter(filterFn)
+        ],
+        expected
+    );
     t.end();
 });
 
@@ -227,9 +258,16 @@ test('range - should only transform values that pass the filter if filter is cal
     const start = 1;
     const end = 10;
 
-    const expected = [ 1, 9, 25, 49, 81 ];
+    const expected = [1, 9, 25, 49, 81];
 
-    t.isEquivalent([...range(start, end).filter(filterFn).map(mapFn)], expected);
+    t.isEquivalent(
+        [
+            ...range(start, end)
+                .filter(filterFn)
+                .map(mapFn)
+        ],
+        expected
+    );
     t.end();
 });
 
@@ -239,9 +277,16 @@ test('range - should only use the last limit value if multiple limit calls are m
     const limitOne = 50;
     const limitTwo = 10;
 
-    const expected = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
+    const expected = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-    t.isEquivalent([...range(start, end).limit(limitOne).limit(limitTwo)], expected);
+    t.isEquivalent(
+        [
+            ...range(start, end)
+                .limit(limitOne)
+                .limit(limitTwo)
+        ],
+        expected
+    );
     t.end();
 });
 
@@ -250,7 +295,7 @@ test('range - should stop producing values once takeUntil returns true', t => {
     const start = 1;
     const end = 10;
 
-    const expected = [ 1, 2, 3, 4, 5, 6 ];
+    const expected = [1, 2, 3, 4, 5, 6];
 
     t.isEquivalent([...range(start, end).takeUntil(takeUntil)], expected);
     t.end();
@@ -261,9 +306,16 @@ test('range - stop producing values if the takeUntil function returns true, rega
     const start = 1;
     const end = 10;
 
-    const expected = [ 1, 4, 9, 16, 25, 36 ];
+    const expected = [1, 4, 9, 16, 25, 36];
 
-    t.isEquivalent([...range(start, end).takeUntil(takeUntil).map(val => val * val)], expected);
+    t.isEquivalent(
+        [
+            ...range(start, end)
+                .takeUntil(takeUntil)
+                .map(val => val * val)
+        ],
+        expected
+    );
     t.end();
 });
 
@@ -286,7 +338,6 @@ test('range - should not produce any values if start or end is not a number', t 
     t.isEquivalent([...range('start', {})], []);
     t.end();
 });
-
 
 test('range - should not produce any values if limit is called with a negative number', t => {
     const start = 1;

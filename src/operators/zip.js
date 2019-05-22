@@ -41,7 +41,9 @@ function _getZipIterator(iters) {
  */
 export default function zip(...iters) {
     if (iters.some(iter => !isIterable(iter))) {
-        throw new TypeError('zip requires that all arguments implement the iterable protocol.');
+        throw new TypeError(
+            'zip requires that all arguments implement the iterable protocol.'
+        );
     }
 
     return {
