@@ -6,7 +6,9 @@ import range from '../../range';
 
 test('distinct - should throw an error if the given argument is not an iterable', t => {
     const nonIter = 42;
-    t.throws(() => { distinct(nonIter); });
+    t.throws(() => {
+        distinct(nonIter);
+    });
     t.end();
 });
 

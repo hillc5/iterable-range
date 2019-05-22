@@ -7,7 +7,9 @@ import range from '../../range';
 test('concat - should throw an error if any of the given arguments are not an iterable', t => {
     const iter = [1, 2, 3];
     const nonIter = 42;
-    t.throws(() => { concat(iter, nonIter); });
+    t.throws(() => {
+        concat(iter, nonIter);
+    });
     t.end();
 });
 
@@ -25,7 +27,24 @@ test('concat - should produce all values for an iterable before any others, in t
 
     const c = concat(iter1, iter2, iter3);
 
-    const expected = [0, 25, 50, 75, -100, -75, -50, -25, 0, -100, 25, -75, 50, -50, 75, -25];
+    const expected = [
+        0,
+        25,
+        50,
+        75,
+        -100,
+        -75,
+        -50,
+        -25,
+        0,
+        -100,
+        25,
+        -75,
+        50,
+        -50,
+        75,
+        -25
+    ];
 
     t.isEquivalent([...c], expected);
     t.end();

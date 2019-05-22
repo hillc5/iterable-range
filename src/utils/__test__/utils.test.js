@@ -201,12 +201,7 @@ test('combineIterators - should produce arrays as values for each iterator inclu
     const iter2 = [1, 2];
     const iter3 = 'Lisa';
 
-    const expectedValues = [
-        [1, 1, 'L'],
-        [2, 2, 'i'],
-        [3, 's'],
-        ['a']
-    ];
+    const expectedValues = [[1, 1, 'L'], [2, 2, 'i'], [3, 's'], ['a']];
 
     const combinedIter = combineIterators([iter1, iter2, iter3]);
 
@@ -217,7 +212,9 @@ test('combineIterators - should produce arrays as values for each iterator inclu
 test('combineIterators - should throw a TypeError if an array is not passed in', t => {
     const param = 42;
 
-    t.throws(() => { combineIterators(param); });
+    t.throws(() => {
+        combineIterators(param);
+    });
     t.end();
 });
 
@@ -226,21 +223,15 @@ test('combineIterators - should throw a TypeError if any item in the given array
     const iter2 = 'Charlie is Iterable';
     const nonIter = 42;
 
-    t.throws(() => { combineIterators([iter1, iter2, nonIter]); });
+    t.throws(() => {
+        combineIterators([iter1, iter2, nonIter]);
+    });
     t.end();
 });
 
 test('combineIterators - should work for a single iterable', t => {
     const iter1 = 'Charlie';
-    const expected = [
-        ['C'],
-        ['h'],
-        ['a'],
-        ['r'],
-        ['l'],
-        ['i'],
-        ['e']
-    ];
+    const expected = [['C'], ['h'], ['a'], ['r'], ['l'], ['i'], ['e']];
 
     t.isEquivalent([...combineIterators([iter1])], expected);
     t.end();

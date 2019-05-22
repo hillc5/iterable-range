@@ -1,58 +1,63 @@
 {
-  "name": "iterable-range",
-  "version": "3.7.1",
-  "description": "range iterator with step, map, filter, and other userful helper functions and operators.  All values lazy-loaded",
-  "main": "lib",
-  "scripts": {
-    "lint": "./node_modules/.bin/eslint src",
-    "test": "npm run lint && nyc npm run run-tests",
-    "run-tests": "babel-tape-runner **/__test__/*.test.js | faucet",
-    "build": "rm -rf ./lib && babel src --out-dir lib --ignore test.js",
-    "prepare": "npm run test && npm run build"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/hillc5/range-iterator.git"
-  },
-  "keywords": [
-    "range",
-    "iterator",
-    "iterable",
-    "generator",
-    "lazy",
-    "filter",
-    "map",
-    "reverse",
-    "step",
-    "limit",
-    "takeUntil",
-    "operators",
-    "zip",
-    "distinct"
-  ],
-  "author": "Charlie Hill",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/hillc5/range-iterator/issues"
-  },
-  "homepage": "https://github.com/hillc5/range-iterator#readme",
-  "devDependencies": {
-    "@sinonjs/referee-sinon": "^5.0.0",
-    "babel-cli": "^6.26.0",
-    "babel-eslint": "^8.2.6",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-plugin-transform-regenerator": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-tape-runner": "^2.0.1",
-    "eslint": "^4.19.1",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.17.2",
-    "faucet": "0.0.1",
-    "nyc": "^14.1.1",
-    "sinon": "^6.3.5",
-    "tape": "^4.10.1"
-  },
-  "dependencies": {
-    "regenerator-runtime": "^0.12.1"
-  }
+    "name": "iterable-range",
+    "version": "3.7.1",
+    "description": "range iterator with step, map, filter, and other userful helper functions and operators.  All values lazy-loaded",
+    "main": "lib",
+    "scripts": {
+        "lint": "./node_modules/.bin/eslint src",
+        "test": "npm run lint && nyc npm run run-tests",
+        "run-tests": "babel-tape-runner **/__test__/*.test.js | faucet",
+        "build": "rm -rf ./lib && babel src --out-dir lib --ignore test.js",
+        "prepare": "npm run test && npm run build"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/hillc5/range-iterator.git"
+    },
+    "keywords": [
+        "range",
+        "iterator",
+        "iterable",
+        "generator",
+        "lazy",
+        "filter",
+        "map",
+        "reverse",
+        "step",
+        "limit",
+        "takeUntil",
+        "operators",
+        "zip",
+        "distinct"
+    ],
+    "author": "Charlie Hill",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/hillc5/range-iterator/issues"
+    },
+    "homepage": "https://github.com/hillc5/range-iterator#readme",
+    "devDependencies": {
+        "@sinonjs/referee-sinon": "^5.0.0",
+        "babel-cli": "^6.26.0",
+        "babel-eslint": "^8.2.6",
+        "babel-plugin-transform-object-rest-spread": "^6.26.0",
+        "babel-plugin-transform-regenerator": "^6.26.0",
+        "babel-preset-env": "^1.7.0",
+        "babel-tape-runner": "^2.0.1",
+        "eslint": "^4.19.1",
+        "eslint-config-airbnb-base": "^13.1.0",
+        "eslint-plugin-import": "^2.17.2",
+        "faucet": "0.0.1",
+        "nyc": "^14.1.1",
+        "prettier": "^1.17.1",
+        "sinon": "^6.3.5",
+        "tape": "^4.10.1"
+    },
+    "dependencies": {
+        "regenerator-runtime": "^0.12.1"
+    },
+    "prettier": {
+        "tabWidth": 4,
+        "singleQuote": true
+    }
 }

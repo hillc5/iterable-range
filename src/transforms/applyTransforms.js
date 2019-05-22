@@ -8,7 +8,9 @@ import TRANSFORM_TYPES from './transform-types';
  *                        (Note: if a FILTER function returns falsy, undefined will be returned).
  */
 export default function applyTransforms(value, transforms = []) {
-    if (!transforms || !Array.isArray(transforms)) return { value, filtered: false };
+    if (!transforms || !Array.isArray(transforms)) {
+        return { value, filtered: false };
+    }
 
     for (const transformObj of transforms) {
         const { type, transform } = transformObj;

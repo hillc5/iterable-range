@@ -7,7 +7,9 @@ test('zip - should throw an error if any given argument is not an iterable', t =
     const iter2 = 'Charlie is Iterable';
     const nonIter = 42;
 
-    t.throws(() => { zip(iter1, iter2, nonIter); });
+    t.throws(() => {
+        zip(iter1, iter2, nonIter);
+    });
     t.end();
 });
 

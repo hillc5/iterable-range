@@ -10,7 +10,10 @@ export default function combine(iters, combineFn = NOOP) {
         let { value, done } = combinedIterators.next();
         while (!done) {
             yield combineFn(value);
-            const { value: nextValue, done: nextDone } = combinedIterators.next();
+            const {
+                value: nextValue,
+                done: nextDone
+            } = combinedIterators.next();
             value = nextValue;
             done = nextDone;
         }
