@@ -1,4 +1,4 @@
-import { hasInvalidParameters } from './utils';
+import { hasInvalidParameters } from '../utils';
 
 import RangeBuilder from './RangeBuilder';
 

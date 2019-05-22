@@ -1,6 +1,6 @@
 import test from 'tape';
 
-import range from '../range';
+import range from '..';
 
 test('range - should return an iterable that produces all values from the given start (inclusive) to the given end (non-inclusive)', t => {
     const expected = [1, 2, 3, 4, 5, 6, 7, 8, 9];

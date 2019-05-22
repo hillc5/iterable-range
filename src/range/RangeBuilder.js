@@ -5,11 +5,11 @@ import {
     getStartAndEndValue,
     returnFalse,
     getNewConfig
-} from './utils';
+} from '../utils';
 
-import applyTransforms from './transforms/applyTransforms';
-import generateTransform from './transforms/generateTransform';
-import TRANSFORM_TYPES from './transforms/transform-types';
+import applyTransforms from '../transforms/applyTransforms';
+import generateTransform from '../transforms/generateTransform';
+import TRANSFORM_TYPES from '../transforms/transform-types';
 
 function _generateValue(element, transforms, end, reverse, step) {
     let newElement = element;
