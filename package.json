@@ -1,6 +1,6 @@
 {
     "name": "iterable-range",
-    "version": "3.7.1",
+    "version": "3.7.2",
     "description": "range iterator with step, map, filter, and other userful helper functions and operators.  All values lazy-loaded",
     "main": "lib",
     "scripts": {
